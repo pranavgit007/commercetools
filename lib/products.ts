@@ -1,7 +1,8 @@
-import { apiRoot } from './commercetools'
+import { getApiRoot } from '@/lib/commercetools'
 import { getCategoryBySlug } from './category'
 
 export async function getProductsByCategory(slug: string) {
+  const apiRoot = getApiRoot()
   const catid = await getCategoryBySlug(slug)
 
   if (!catid) {
