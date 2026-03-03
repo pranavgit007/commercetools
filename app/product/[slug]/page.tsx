@@ -15,7 +15,7 @@ export default async function ProductPage({
     }
 
     const image = product.masterVariant.images?.[0]
-
+    const price = product.masterVariant.prices?.[0]?.value?.centAmount
     return (
         <div className="grid grid-cols-2 gap-10">
             {image && (
@@ -38,8 +38,7 @@ export default async function ProductPage({
                 </p>
 
                 <p className="text-2xl font-semibold">
-                    $
-                    {product.masterVariant.prices?.[0]?.value?.centAmount / 100}
+                    {price ? `$${price / 100}` : 'Price not available'}
                 </p>
             </div>
         </div>
