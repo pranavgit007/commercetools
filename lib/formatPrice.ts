@@ -1,3 +1,5 @@
+import { ProductProjection } from "@commercetools/platform-sdk";
+
 export function formatPrice(
   centAmount: number,
   currencyCode: string,
@@ -9,7 +11,7 @@ export function formatPrice(
   }).format(centAmount / 100);
 }
 
-export function getformatedAmount(product: number) {
+export function getformatedAmount(product:ProductProjection) {
   const priceData = product.masterVariant.price;
 
   const formatted =

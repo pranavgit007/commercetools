@@ -1,6 +1,7 @@
 import './globals.css'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import { Toaster } from "sonner"
 
 export default function RootLayout({
   children,
@@ -13,6 +14,7 @@ export default function RootLayout({
         <Header />
         <main className="flex-1 container mx-auto p-6">
           {children}
+          <Toaster position="top-right" />
         </main>
         <Footer />
       </body>

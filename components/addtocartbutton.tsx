@@ -1,6 +1,9 @@
 "use client"
 
 import { addToCart } from "@/app/actions/cartActions"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
 
 export default function AddToCartButton({
     productId,
@@ -9,16 +12,33 @@ export default function AddToCartButton({
     productId: string
     variantId: number
 }) {
+    const router = useRouter()
+
+    const [loading, setLoading] = useState(false)
+
+    async function handleAdd() {
+        try {
+            setLoading(true)
+
+            await addToCart(productId, variantId)
+
+            toast.success("Added to cart 🛒")
+
+            router.refresh()
+        } catch (e) {
+            toast.error("Could not add item")
+        } finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <button
-            onClick={async () => {
-                await addToCart(productId, variantId)
-                alert("Added to cart")
-                location.reload()
-            }}
-            className="bg-black text-white px-4 py-2 mt-4 cursor-pointer"
+            onClick={handleAdd}
+            disabled={loading}
+            className="bg-black text-white px-4 py-2 mt-4 disabled:opacity-50 cursor-pointer"
         >
-            Add To Cart
+            {loading ? "Adding..." : "Add To Cart"}
         </button>
     )
 }
