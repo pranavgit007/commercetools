@@ -1,5 +1,7 @@
 import { getProductBySlug } from '../../../lib/product'
 import Image from 'next/image'
+import { getformatedAmount } from '@/lib/formatPrice'
+import AddToCartButton from '@/components/addtocartbutton'
 
 export default async function ProductPage({
     params,
@@ -15,7 +17,6 @@ export default async function ProductPage({
     }
 
     const image = product.masterVariant.images?.[0]
-    const price = product.masterVariant.prices?.[0]?.value?.centAmount
     return (
         <div className="grid grid-cols-2 gap-10">
             {image && (
@@ -38,8 +39,12 @@ export default async function ProductPage({
                 </p>
 
                 <p className="text-2xl font-semibold">
-                    {price ? `$${price / 100}` : 'Price not available'}
+                    {getformatedAmount(product)}
                 </p>
+                <AddToCartButton
+                    productId={product.id}
+                    variantId={product.masterVariant.id}
+                />
             </div>
         </div>
     )

@@ -1,4 +1,6 @@
 import { getProductsByCategory } from '../../../lib/products'
+import { getformatedAmount } from '@/lib/formatPrice'
+import Link from 'next/link'
 
 export default async function CategoryPage({
     params,
@@ -26,16 +28,18 @@ export default async function CategoryPage({
                             alt={product.name?.['en-US']}
                             className="w-full h-48 object-cover mb-3"
                         />
-                        <h2 className="font-semibold">
-                            {product.name?.['en-US'] || 'No Name'}
-                        </h2>
+                        <Link href={`/product/${product.slug?.['en-US']}`}>
+                            <h2 className="font-semibold cursor-pointer">
+                                {product.name?.['en-US'] || 'No Name'}
+                            </h2>
+                        </Link>
 
                         <p className="text-sm text-gray-500">
                             {product.description?.['en-US']}
                         </p>
 
                         <p className="mt-2 font-bold">
-                            {product.masterVariant.prices?.[0]?.value?.centAmount / 100}
+                            {getformatedAmount(product)}
                         </p>
                     </div>
                 ))}

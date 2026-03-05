@@ -7,6 +7,8 @@ export async function getProductBySlug(slug: string) {
     .get({
       queryArgs: {
         where: `slug(en-US="${slug}")`,
+        priceCurrency:'USD',
+        priceCountry:'US'
       },
     })
     .execute();

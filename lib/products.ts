@@ -15,6 +15,8 @@ export async function getProductsByCategory(slug: string) {
       queryArgs: {
         filter: [`categories.id:"${catid}"`],
         limit: 12,
+        priceCurrency:'USD',
+        priceCountry:'US'
       },
     })
     .execute()

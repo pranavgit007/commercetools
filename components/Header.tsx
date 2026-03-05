@@ -1,15 +1,34 @@
 import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { getCategories } from '../lib/categories'
+import { getApiRoot } from '@/lib/commercetools'
 
 export default async function Header() {
     const categories = await getCategories()
 
-const cookieStore = await cookies()
-const token = cookieStore.get('ct_customer_token')
-console.log('fjlsafjlsf',token);
+    const cookieStore = await cookies()
+    const token = cookieStore.get('ct_customer_token')
     const isLoggedIn = !!token
+    const cartId = cookieStore.get("ct_cart_id")?.value
 
+    let count = 0
+
+    if (cartId) {
+        const apiRoot = getApiRoot()
+
+        try {
+            const cart = await apiRoot
+                .carts()
+                .withId({ ID: cartId })
+                .get()
+                .execute()
+console.log(cart.body.lineItems);
+            count = cart.body.lineItems.reduce(
+                (t, i) => t + i.quantity,
+                0
+            )
+        } catch { }
+    }
     return (
         <header className="border-b bg-white shadow-sm">
             <div className="container mx-auto p-4 flex justify-between items-center">
@@ -39,6 +58,7 @@ console.log('fjlsafjlsf',token);
                             </button>
                         </form>
                     )}
+                    <Link href="/cart">Cart ({count})</Link>
                 </nav>
             </div>
         </header>

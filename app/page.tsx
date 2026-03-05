@@ -1,9 +1,11 @@
 import { getProductsByCategory } from '@/lib/products'
 import Link from 'next/link'
+import { getformatedAmount } from '@/lib/formatPrice'
+import Image from  'next/image'
 
 export default async function Home() {
     const products = await getProductsByCategory('bedding')
-
+    // Function to return a string
     return (
         <main className="p-10">
             <h1 className="text-2xl font-bold mb-6">Product Listing</h1>
@@ -14,11 +16,11 @@ export default async function Home() {
                         key={product.id}
                         className="border rounded-lg p-4 shadow-sm"
                     >
-                        <img
-                            src={product.masterVariant.images?.[0]?.url}
+                        <Image src={product.masterVariant.images?.[0]?.url}
+                             width={300}
+                             height={300}
                             alt={product.name?.['en-US']}
-                            className="w-full h-48 object-cover mb-3"
-                        />
+                            className="w-full h-48 object-cover mb-3" />
                         <Link href={`/product/${product.slug?.['en-US']}`}>
                             <h2 className="font-semibold cursor-pointer">
                                 {product.name?.['en-US'] || 'No Name'}
@@ -29,12 +31,12 @@ export default async function Home() {
                             {product.description?.['en-US']}
                         </p>
 
-                        <p className="mt-2 font-bold">
-                            {product.masterVariant.prices?.[0]?.value?.centAmount / 100}
+                        <p className="text-2xl font-semibold">
+                            {getformatedAmount(product)}
                         </p>
                     </div>
                 ))}
             </div>
-        </main>
+        </main >
     )
 }
