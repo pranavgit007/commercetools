@@ -1,15 +1,15 @@
-"use server"
+"use server";
 
-import { cookies } from "next/headers"
-import { getApiRoot } from "@/lib/commercetools"
+import { cookies } from "next/headers";
+import { getApiRoot } from "@/lib/commercetools";
 
 export async function addToCart(productId: string, variantId: number) {
-  const apiRoot = getApiRoot()
+  const apiRoot = getApiRoot();
 
-  const cookieStore = await cookies()
-  let cartId = cookieStore.get("ct_cart_id")?.value
+  const cookieStore = await cookies();
+  let cartId = cookieStore.get("ct_cart_id")?.value;
 
-  let cart
+  let cart;
 
   // create cart if missing
   if (!cartId) {
@@ -21,23 +21,23 @@ export async function addToCart(productId: string, variantId: number) {
           country: "US",
         },
       })
-      .execute()
+      .execute();
 
-    cartId = newCart.body.id
-    cart = newCart.body
+    cartId = newCart.body.id;
+    cart = newCart.body;
 
     cookieStore.set("ct_cart_id", cartId, {
       path: "/",
       httpOnly: true,
-    })
+    });
   } else {
     const existingCart = await apiRoot
       .carts()
       .withId({ ID: cartId })
       .get()
-      .execute()
+      .execute();
 
-    cart = existingCart.body
+    cart = existingCart.body;
   }
 
   // add line item
@@ -57,7 +57,36 @@ export async function addToCart(productId: string, variantId: number) {
         ],
       },
     })
-    .execute()
+    .execute();
 
-  return updatedCart.body
+  return updatedCart.body;
+}
+
+export async function clearCart() {
+  const cookieStore = await cookies();
+  const cartId = cookieStore.get("ct_cart_id")?.value;
+
+  if (!cartId) return;
+
+  const apiRoot = getApiRoot();
+
+  const cart = await apiRoot.carts().withId({ ID: cartId }).get().execute();
+
+  if (!cart.body.lineItems.length) return;
+
+  const actions = cart.body.lineItems.map((item) => ({
+    action: "removeLineItem" as const,
+    lineItemId: item.id,
+  }));
+
+  await apiRoot
+    .carts()
+    .withId({ ID: cartId })
+    .post({
+      body: {
+        version: cart.body.version,
+        actions,
+      },
+    })
+    .execute();
 }
