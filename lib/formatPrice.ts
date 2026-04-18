@@ -12,7 +12,7 @@ export function formatPrice(
 }
 
 export function getformatedAmount(product:ProductProjection) {
-  const priceData = product.masterVariant.price;
+  const priceData = product.masterVariant.price || product.masterVariant.prices?.[0];
 
   const formatted =
     priceData &&

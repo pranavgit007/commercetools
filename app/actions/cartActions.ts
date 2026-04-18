@@ -3,6 +3,22 @@
 import { cookies } from "next/headers";
 import { getApiRoot } from "@/lib/commercetools";
 
+export async function getCart() {
+  const cookieStore = await cookies();
+  const cartId = cookieStore.get("ct_cart_id")?.value;
+  if (!cartId) {
+    return null;
+  }
+  const apiRoot = getApiRoot();
+  const existingCart = await apiRoot
+    .carts()
+    .withId({ ID: cartId })
+    .get()
+    .execute();
+
+  return existingCart.body;
+}
+
 export async function addToCart(productId: string, variantId: number) {
   const apiRoot = getApiRoot();
 

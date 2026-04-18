@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { cookies } from 'next/headers'
 import { getCategories } from '../lib/categories'
 import { getApiRoot } from '@/lib/commercetools'
+import SearchBox from "./SearchBox"
 
 export default async function Header() {
     const categories = await getCategories()
@@ -32,6 +33,7 @@ console.log(cart.body.lineItems);
     return (
         <header className="border-b bg-white shadow-sm">
             <div className="container mx-auto p-4 flex justify-between items-center">
+                <SearchBox />
                 <Link href="/" className="text-xl font-bold">
                     CT Store
                 </Link>
@@ -59,6 +61,9 @@ console.log(cart.body.lineItems);
                         </form>
                     )}
                     <Link href="/cart">Cart ({count})</Link>
+                    {/* <Link href="/checkout" className="bg-black text-white px-6 py-3 mt-6 inline-block">
+                    Checkout
+                    </Link> */}
                 </nav>
             </div>
         </header>
