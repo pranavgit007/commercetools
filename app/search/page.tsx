@@ -4,7 +4,7 @@ import ProductListingGrid from '@/components/Listingpage'
 export default async function SearchPage({
     searchParams,
 }: {
-    searchParams: Promise<{ q?: string ,category? :string,price? :string }>
+    searchParams: Promise<{ q?: string, category?: string, price?: string }>
 }) {
     const { q, category, price } = await searchParams
     const data = await searchProducts(q || "", {
@@ -17,7 +17,7 @@ export default async function SearchPage({
     const rangeFacet = facets?.["variants.price.centAmount"] as any
     const categoryMap: Record<string, string> = {}
     products.forEach(p => {
-        p.categories.forEach((c :any) => {
+        p.categories.forEach((c: any) => {
             categoryMap[c.id] = c.obj.name["en-US"]
         })
     });
@@ -30,15 +30,16 @@ export default async function SearchPage({
 
                 <div className="w-full md:w-1/4 p-4 border rounded">
                     <b>Categories</b>
-                    
-                    {
-                    categoryFacet?.terms?.map((c: any) => (
-                        <div key={c.term}>
-                            <a href={`/search?q=${q}&category=${c.term}`}>
-                                {categoryMap[c.term]} ({c.count})
-                            </a>
-                        </div>
-                    ))}
+
+                    {categoryFacet?.terms
+                        ?.filter((c: any) => categoryMap[c.term])
+                        .map((c: any) => (
+                            <div key={c.term}>
+                                <a href={`/search?q=${q}&category=${c.term}`}>
+                                    {categoryMap[c.term]} ({c.count})
+                                </a>
+                            </div>
+                        ))}
                     <b>Price</b>
                     {rangeFacet?.ranges?.map((r: any, i: number) => (
                         <div key={i}>
