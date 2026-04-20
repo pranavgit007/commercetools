@@ -4,6 +4,7 @@
 import { useRouter } from "next/navigation"
 import { useRef, useState } from "react";
 import FullPageLoader from './FullPageLoader';
+import Swal from "sweetalert2";
 
 export default function SearchBox() {
     const router = useRouter()
@@ -75,7 +76,10 @@ export default function SearchBox() {
         if (useraws) {
             // 2. Client-side size check (5MB)
             if (file.size > 5 * 1024 * 1024) {
-                alert("File is too large! Please upload an image under 5MB.");
+                Swal.fire({
+                    icon: "error",
+                    text: "File is too large! Please upload an image under 5MB.",
+                });
                 return;
             }
             setIsLoading(true);
@@ -97,12 +101,19 @@ export default function SearchBox() {
                     searchString = data.labels.join(' ');
                 } else {
                     console.error(data);
-                    alert("No Match Found. " + data?.details?.error);
+                    Swal.fire({
+                        icon: "error",
+                        text: "No Match Found. " + data?.details?.error,
+                    });
+                    return;
                 }
             } catch (error) {
                 setIsLoading(false);
                 console.error("Error calling AWS Lambda:", error);
-                alert("Failed to process image. check console for details.");
+                Swal.fire({
+                    icon: "error",
+                    text: "ailed to process image. check console for details",
+                });
                 return;
             }
         } else {

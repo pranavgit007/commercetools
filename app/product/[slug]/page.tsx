@@ -2,6 +2,7 @@ import { getProductBySlug } from '../../../lib/product'
 import Image from 'next/image'
 import { getformatedAmount } from '@/lib/formatPrice'
 import AddToCartButton from '@/components/addtocartbutton'
+import { CompareButton } from '@/components/CompareButton'
 
 export default async function ProductPage({
     params,
@@ -45,6 +46,7 @@ export default async function ProductPage({
                     productId={product.id}
                     variantId={product.masterVariant.id}
                 />
+                <CompareButton product={product}/>
             </div>
         </div>
     )

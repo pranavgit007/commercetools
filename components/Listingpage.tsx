@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { getformatedAmount } from '@/lib/formatPrice'
 import Image from  'next/image'
 import AddToCartButton from '@/components/addtocartbutton'
+import { CompareButton } from '@/components/CompareButton'
 
 export default function ProductListingGrid({
     products
@@ -38,6 +39,7 @@ export default function ProductListingGrid({
                         productId={product.id}
                         variantId={product.masterVariant.id}
                     />
+                    <CompareButton product={product}/>
                 </div>
             ))}
         </div>

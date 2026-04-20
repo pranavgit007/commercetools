@@ -2,6 +2,7 @@ import './globals.css'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { Toaster } from "sonner"
+import CompareBar from "@/components/CompareBar";
 
 export default function RootLayout({
   children,
@@ -17,6 +18,7 @@ export default function RootLayout({
           <Toaster position="top-right" />
         </main>
         <Footer />
+        <CompareBar /> {/* 🔥 global */}
       </body>
     </html>
   )
